@@ -1,4 +1,4 @@
-const logger = require('../startup/logging.js'); //vid148
+const { logger } = require('../startup/logging.js'); //vid148
 //here err is the exception(ex) that throws the catch block. in genres.js->
 
 //this error middleware in express chatches any error in request processing pipeline.
