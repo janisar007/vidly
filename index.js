@@ -1,15 +1,16 @@
 require('express-async-errors');
 const winston = require('winston');
 require('winston-mongodb');
-const mongoose = require('mongoose'); //an object
 const Joi = require('joi');
 
 const logger = require('./startup/logging.js');
 const config = require('config');
 const express = require('express'); //returns object
 const app = express(); //in these objects, there are get(), post(), put(), delete() methods
-//1vvid153----------------------
-require('./startup/routes')(app); // require('./startup/routes') hame ek function dega jisme hum app ko pass kark us function ko call kr denge simple.
+require('./startup/routes.js')(app); // require('./startup/routes') hame ek function dega jisme hum app ko pass kark us function ko call kr denge simple.
+
+//1vvid154----------------------
+require('./startup/db.js')();
 //1^-----------------------------------
  
 //1vvid150,152---------------------------------------------
@@ -43,10 +44,7 @@ if(!config.get('jwtPrivateKey')) {
 
 
 
-//connection to DB.
-mongoose.connect('mongodb://127.0.0.1/vidly')
-    .then(() => console.log('Connected to MongoDB...'))
-    .catch(err => console.error('Could not connect to MongoDB...', err)); //err is an obj.
+
 
 
 
