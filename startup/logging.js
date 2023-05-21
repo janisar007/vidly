@@ -12,6 +12,10 @@ const logger = winston.createLogger({
             colletion: 'error-logs'
         })
     ],
+    
+    transports: [
+        new winston.transports.Console()
+    ],
 
     exceptionHandlers: [
         new winston.transports.File({ filename: 'uncaughtExceptions.log' })

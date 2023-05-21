@@ -13,5 +13,5 @@ const configEnv = function() {
         // process.exit(1); // exit(0) means process is successed, anything else 0 means failure.
     }
 }
-exports.configEnv = configEnv;
+module.exports = configEnv;
 
