@@ -62,7 +62,7 @@ router.post('/', auth, async (req, res) => { //second argument can be a middlewa
 
     const {error} = validate(req.body);
     if(error){
-        res.status(404).send(error.details[0].message);
+        res.status(400).send(error.details[0].message);
         return;
     }
 

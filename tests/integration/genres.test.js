@@ -1,5 +1,6 @@
 const request = require('supertest'); //iski help se hum get post ..all requests bhej sakte hai.
 const { Genre } = require('../../models/genre');
+const { User } = require('../../models/user');
 let server;
 
 describe('/api/genres', () => {
@@ -54,4 +55,67 @@ describe('/api/genres', () => {
         });
     });
  //1^-------------------------------------------------------------
+ 
+ //2v vid 189,190,191---------------------------------------
+    describe('POST /', () => {
+        it('should return a 401 if client is not logged in',async () => {
+            const res = await request(server).post('/api/genres').send({ name: 'genre1' });
+
+            expect(res.status).toBe(401); //q ki abhi user post krne k liye autherized nahi hai, uske paas token nahi hai.
+        });
+
+        it('should return a 400 genre is less than 5 character', async () => {
+            const token = new User().generateAuthToken();
+
+            const res = await request(server)
+            .post('/api/genres')
+            .set('x-auth-token', token)
+            .send({ name: '1234' });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('should return a 400 genre is more than 50 character', async () => {
+            const token = new User().generateAuthToken();
+
+            const name = new Array(52).join('a'); //this will return an 51 characterd string.
+
+            const res = await request(server)
+            .post('/api/genres')
+            .set('x-auth-token', token)
+            .send({ name: name });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('should save the genre if it is valid', async () => {
+            const token = new User().generateAuthToken();
+
+            const name = new Array(52).join('a'); //this will return an 51 characterd string.
+
+            const res = await request(server)
+            .post('/api/genres')
+            .set('x-auth-token', token)
+            .send({ name: 'genre1' });
+
+            const genre = await Genre.find({ name: 'genre1' });
+
+            expect(genre).not.toBeNull();
+        });
+        
+        it('should return the genre if it is valid', async () => {
+            const token = new User().generateAuthToken();
+            
+            const name = new Array(52).join('a'); //this will return an 51 characterd string.
+
+            const res = await request(server)
+            .post('/api/genres')
+            .set('x-auth-token', token)
+            .send({ name: 'genre1' });
+
+            expect(res.body).toHaveProperty('_id');
+            expect(res.body).toHaveProperty('name', 'genre1');
+        });
+    });
+    //2^--------------------------------------------------------
 });
