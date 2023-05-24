@@ -4,6 +4,7 @@ const {Genre, validate} = require('../models/genre');
 const auth = require('../middleware/auth.js');
 const admin = require('../middleware/admin.js');
 // const asyncMiddleware = require('../middleware/async.js');
+const validateObjectId = require('../middleware/validateObjectId');
 
 const mongoose = require('mongoose');
 const express = require('express');
@@ -46,7 +47,7 @@ router.get('/', async (req, res) => {
 //1^--------------------------------------------------------------
 
 //2.showing specific genre->
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => { //this validateObjectId middleware added in vid188.
     const genre = await Genre.findById(req.params.id);
     if(!genre) {
         res.status(404).send('Gener with given id is not found!!!');
