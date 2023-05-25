@@ -1,6 +1,7 @@
 const request = require('supertest'); //iski help se hum get post ..all requests bhej sakte hai.
 const { Genre } = require('../../models/genre');
 const { User } = require('../../models/user');
+const mongoose = require('mongoose');
 let server;
 
 describe('/api/genres', () => {
@@ -52,10 +53,18 @@ describe('/api/genres', () => {
         expect(res.body).toHaveProperty('name', genre.name);
         });
 
-        it('should return 404 if invalid id is passed', async () => { 
+        it('should return 404 if invalid id is passed', async () => { //this is when validateObjectId middleware acted.
             const res = await request(server).get('/api/genres/1');
            expect(res.status).toBe(404);
         });
+
+        //3v vid195----------------------------------------
+        it('should return 404 if no genre with the given id exists', async () => { //see vid 195
+            const id = new mongoose.Types.ObjectId();
+            const res = await request(server).get('/api/genres/' + id);
+           expect(res.status).toBe(404);
+        });
+        //3^----------------------------------------------
     });
  //1^-------------------------------------------------------------
  
