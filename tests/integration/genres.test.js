@@ -7,10 +7,13 @@ describe('/api/genres', () => {
     //hame har test se pehle server ko on aur har test k baad off krna hoga nahi to agr test-1 k liye server on ho kar band nahi kiya jaega to next test k liye wo server busy bataega ur error throw ho jaega. iske liye hum beforeEach and afterEach function ka use krte hai->
     beforeEach(() => { server = require('../../index'); }); //beforeEach function me likh code har ek test se pehle run hota hai.
     afterEach( async () => { 
-        server.close(); 
         await Genre.deleteMany({}); //hame db empty krna hoga after the end of the test. q ki fir next test fail ho skta hai.
     }); //afterEach me likha code har test k baad run hota hai.
-
+    
+    afterEach(() => { //server.close() ko async me mat dhalo nahi to server der me close hoga aur next test k liye server busy bataega. (from vid 194)
+        server.close(); 
+    });
+    
     describe('GET /', () => {
         it('should return all genres', async () => {
             await Genre.collection.insertMany([ //mongoose k insertMany function se hum apne databse me ek saath kai objects insert kar sakte hai.
