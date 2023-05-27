@@ -77,7 +77,7 @@ router.post('/', auth, async (req, res) => { //second argument can be a middlewa
 router.put('/:id', auth, async (req, res) => {
     const {error} = validate(req.body);
     if(error){
-        res.status(404).send(error.details[0].message);
+        res.status(400).send(error.details[0].message);
         return;
     }
 

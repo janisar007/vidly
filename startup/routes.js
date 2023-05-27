@@ -5,6 +5,7 @@ const movies = require('../routes/movies');
 const rentals = require('../routes/rentals');
 const users = require('../routes/users');
 const auth = require('../routes/auth');
+const returns = require('../routes/returns');
 const error = require('../middleware/error.js');
 
 const routes = function(app) {
@@ -20,6 +21,7 @@ const routes = function(app) {
     app.use('/api/rentals', rentals);
     app.use('/api/users', users);
     app.use('/api/auth', auth);
+    app.use('/api/returns', returns);
 
     //1v-vid144,145------------------------------------------------
     //since ham chahte hai ki ye middleware function ek dam last me execute ho is liye maine ise index.js me above abhi middleware function (app.use()) k baad likha hai. yaani sabse pehle sabhi uper wale run honge phir ek dam last me ye middleware func run hoga.
