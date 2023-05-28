@@ -1,13 +1,17 @@
 const request = require('supertest');
 const { Rental } = require('../../models/rental');
 const { User } = require('../../models/user');
+const { Movie } = require('../../models/movie');
 const mongoose = require('mongoose');
+const moment = require('moment');
+
 
 describe('/api/returns', () => {
     let server;
     let customerId;
     let movieId;
     let rental;
+    let movie;
     let token;
 
     const exec = () => {
@@ -24,6 +28,15 @@ describe('/api/returns', () => {
         movieId = new mongoose.Types.ObjectId();
         token = new User().generateAuthToken();
 
+        movie = new Movie({
+            _id: movieId,
+            title: 'Terminator',
+            dailyRentalRate: 2,
+            genre: { name: 'Sci-fi' },
+            numberInStock: 10
+        });
+        await movie.save();
+
         rental = new Rental({
             customer: {
                 _id: customerId,
@@ -33,7 +46,7 @@ describe('/api/returns', () => {
 
             movie: {
                 _id: movieId,
-                title: 'terminator',
+                title: 'Terminator',
                 dailyRentalRate: 2
             },
 
@@ -42,6 +55,7 @@ describe('/api/returns', () => {
     }); 
     afterEach( async () => { 
         await Rental.deleteMany({});
+        await Movie.deleteMany({});
         await server.close(); 
     });
 
@@ -127,4 +141,40 @@ describe('/api/returns', () => {
 
     });
 
-});w
+    it('should set the rentalFee if input is valid.', async () => { //vid209.
+
+        //moment() ->to get current time, add(-7, 'days') ->current time se 7 din('days') pehle set kar rahe hai. and finally toDate() se date ko js date me badal do taki dateOut k atype hi wahi hai->
+        rental.dateOut = moment().add(-7, 'days').toDate();
+        await rental.save();
+
+        const res = await exec();
+
+        const rentalInDb = await Rental.findById(rental._id);
+
+        expect(rentalInDb.rentalFee).toBe(14);
+
+    });
+
+    it('should increase the stock if input is valid.', async () => { //vid210.
+
+        const res = await exec();
+
+        const movieInDb = await Movie.findById(movieId);
+
+        expect(movieInDb.numberInStock).toBe(movie.numberInStock + 1);
+
+    });
+
+    it('should return the rental if input is valid.', async () => { //vid211.
+
+        const res = await exec();
+
+        const rentalInDb = await Rental.findById(rental._id);
+        // expect(res.body).toMatchObject(rentalInDb); //ye fail ho jaega q ki hum rental me dates js object ki tarah store kr rahe hai per res me jo rental return ho raha hai usme dates json object(string) k form me hai. isliye thoda aur genral expecation likhna hoga ->
+
+        //Object.keys(anyObject) kisi bhi object ki properties ko ek array of strings k form mr change kr deti hai.
+        expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['dateOut', 'dateReturned', 'rentalFee', 'customer', 'movie']));
+
+    });
+
+});

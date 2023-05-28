@@ -1,8 +1,9 @@
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
+const moment = require('moment');
 
-const rental = new mongoose.Schema({
+const rentalSchema = new mongoose.Schema({
   customer: { 
     //yaha hum type me customer k liye new schema define kar rahe hai na ki customer.js se import kar k use kr rahe hai. aesa is liye q ki ho sakta ho imported cutomer schema me 50 property ho lekin hame 3 ki hi jarurat hai. is liye new schema ko accordingly bana liya hai.
     type: new mongoose.Schema({
@@ -56,7 +57,28 @@ const rental = new mongoose.Schema({
     min: 0
   }
 });
-const Rental = mongoose.model('rental', rental);
+
+//js me do tarah se method ko define krte hai-> vid213.->
+// 1. static-> ye method direct class me hi define hote hai. inhe use krne k liye us class ka object nahi bana padta hai.
+//2. instance-> inhe use krne k liye pehle object(instance) banana padta hai. q ki ye methods us perticular object per dependent rahte hai.
+//lookup is just a name of method.
+//here i am making a static method->
+rentalSchema.statics.lookup = function(customerId, movieId) { //vid213.
+  //here this is referenced to Rental class.
+    return this.findOne({ //we will not await it here. when lookup will called then await it there.
+        'customer._id': customerId, 
+        'movie._id': movieId 
+    });
+}
+
+rentalSchema.methods.return = function() { //vid 214.
+    this.dateReturned = new Date();
+
+    const rentalDays = moment().diff(this.dateOut, 'days');
+    this.rentalFee = rentalDays * this.movie.dailyRentalRate;
+}
+ 
+const Rental = mongoose.model('rental', rentalSchema);
 
 function validateRental(rental) {
   const schema = {

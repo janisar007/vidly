@@ -74,7 +74,7 @@ router.post('/', auth, async (req, res) => { //second argument can be a middlewa
 });
 
 // 4.updating genre->
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', [auth, validateObjectId], async (req, res) => {
     const {error} = validate(req.body);
     if(error){
         res.status(400).send(error.details[0].message);
