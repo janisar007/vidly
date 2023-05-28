@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "18.16.0"
   },
   "author": "",
   "license": "ISC",

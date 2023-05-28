@@ -15,7 +15,7 @@ require('./startup/config.js')();
 require('./startup/validation.js')();
 //1^-----------------------------------
 
-require('./startup/logging.js')(app); //vid216
+require('./startup/prod.js')(app); //vid216
 
 // const p = Promise.reject(new Error('Unhandled Promise'));
 // p.then(() => console.log('Done'));
