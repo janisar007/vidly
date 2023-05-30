@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
-    "start": "node index.js"
+    "test": "jest --verbose"
   },
   "engines": {
     "node": "18.16.0"
