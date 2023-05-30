@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start":  "node index.js",
     "test": "jest --verbose"
   },
   "engines": {
-    "start":  "node index.js",
     "node": "18.16.0"
   },
   "author": "",
