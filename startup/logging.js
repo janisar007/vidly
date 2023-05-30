@@ -8,7 +8,7 @@ const logger = winston.createLogger({
 
         new winston.transports.MongoDB({
             level: 'error',
-            db: 'mongodb://127.0.0.1/vidly',
+            db: process.env.MONGO_URI,
             colletion: 'error-logs'
         })
     ],

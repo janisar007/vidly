@@ -7,7 +7,7 @@ unhandledExc_Rej();
 
 require('./startup/routes.js')(app); // require('./startup/routes') hame ek function dega jisme hum app ko pass kark us function ko call kr denge simple.
 
-require('./startup/db.js')();
+const database = require('./startup/db.js')();
 
 require('./startup/config.js')();
 
@@ -22,6 +22,10 @@ require('./startup/prod.js')(app); //vid216
 // throw new Error('Something worn winston');
 
 const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {logger.info(`listening on port ${port}...`)}); 
+
+let server;
+
+    server = app.listen(port, () => {logger.info(`listening on port ${port}...`)}); 
+
 
 module.exports = server;

@@ -16,4 +16,14 @@ const db = function() {
     //note-> console.log('Connected to MongoDB...') ko winston.info('Connected to MongoDB...') me change krne se terminal per Connected to MongoDB... likh anhi aega. 
 }
 
+// const database = async () => {
+//   try {
+//     const conn = await mongoose.connect(db);
+//     console.log(`Connected to ${ db }...`);
+//   } catch (error) {
+//     logger.info('Could not connect to mongodb..');
+//     process.exit(1);
+//   }
+// }
+
 module.exports = db;
